@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stellar Zodiac - Offline Horoscope App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* 基础样式 */
+        :root {
+            --primary: #6a5acd;
+            --secondary: #8a2be2;
+            --dark: #0f0f23;
+            --light: #f8f9fa;
+            --star: #ffd700;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--dark);
+            color: var(--light);
+            line-height: 1.6;
+            background-image:
+                radial-gradient(circle at 10% 20%, rgba(107, 90, 205, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(138, 43, 226, 0.1) 0%, transparent 20%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* 导航栏 */
+        header {
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 24px;
+            font-weight: 700;
+            color: white;
+        }
+        
+        .logo i {
+            color: var(--star);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+        
+        nav a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        nav a:hover {
+            color: var(--star);
+        }
+        
+        /* 英雄区域 */
+        .hero {
+            padding: 80px 0;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, #6a5acd, #8a2be2);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 40px;
+            color: #ccc;
+        }
+        
+        .app-icon {
+            width: 150px;
+            height: 150px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 30px;
+            margin: 0 auto 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 15px 30px rgba(106, 90, 205, 0.3);
+        }
+        
+        .app-icon i {
+            font-size: 70px;
+            color: white;
+        }
+        
+        /* 功能区域 */
+        .features {
+            padding: 80px 0;
+            background-color: rgba(15, 15, 35, 0.7);
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 50px;
+            color: white;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+        
+        .feature-card {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(106, 90, 205, 0.2);
+        }
+        
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+        
+        .feature-icon i {
+            font-size: 30px;
+            color: white;
+        }
+        
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: white;
+        }
+        
+        /* 隐私区域 */
+        .privacy-section {
+            padding: 80px 0;
+            text-align: center;
+        }
+        
+        .privacy-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background-color: rgba(0, 255, 0, 0.1);
+            border: 1px solid rgba(0, 255, 0, 0.3);
+            color: #90ee90;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-weight: 600;
+            margin-bottom: 30px;
+        }
+        
+        /* 下载区域 */
+        .download-section {
+            padding: 80px 0;
+            text-align: center;
+            background-color: rgba(15, 15, 35, 0.7);
+        }
+        
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            padding: 18px 40px;
+            border-radius: 15px;
+            text-decoration: none;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-top: 20px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .download-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(106, 90, 205, 0.4);
+        }
+        
+        /* 页脚 */
+        footer {
+            padding: 40px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .footer-links a {
+            color: #aaa;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--star);
+        }
+        
+        .copyright {
+            color: #777;
+            font-size: 0.9rem;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            nav ul {
+                gap: 20px;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <header>
+        <div class="container nav-container">
+            <div class="logo">
+                <i class="fas fa-star"></i>
+                <span>Stellar Zodiac</span>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="privacy.html">Privacy Policy</a></li>
+                    <li><a href="help.html">Help & FAQ</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 主区域 -->
+    <main>
+        <!-- 英雄区域 -->
+        <section class="hero">
+            <div class="container">
+                <div class="app-icon">
+                    <i class="fas fa-star-and-crescent"></i>
+                </div>
+                <h1>Stellar Zodiac</h1>
+                <p>Your personal offline horoscope companion. Explore zodiac signs, save favorites, and create beautiful shareable cards — all without an internet connection and with complete privacy.</p>
+                <a href="#download" class="download-btn">
+                    <i class="fab fa-apple"></i>
+                    Download on the App Store
+                </a>
+            </div>
+        </section>
+
+        <!-- 功能区域 -->
+        <section class="features">
+            <div class="container">
+                <h2 class="section-title">App Features</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <h3>Zodiac Lookup</h3>
+                        <p>Instantly find detailed information for all 12 zodiac signs including traits, compatibility, and more.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-bookmark"></i>
+                        </div>
+                        <h3>Save Favorites</h3>
+                        <p>Bookmark your most relevant zodiac signs for quick access. All data stored locally on your device.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-share-alt"></i>
+                        </div>
+                        <h3>Share & Export</h3>
+                        <p>Create beautiful zodiac cards and share them with friends or save to your photo library.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-wifi-slash"></i>
+                        </div>
+                        <h3>100% Offline</h3>
+                        <p>No internet connection required. All content is included in the app — works anywhere, anytime.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 隐私区域 -->
+        <section class="privacy-section">
+            <div class="container">
+                <div class="privacy-badge">
+                    <i class="fas fa-user-shield"></i>
+                    <span>No Data Collection • Complete Privacy</span>
+                </div>
+                <h2 class="section-title">Your Privacy Matters</h2>
+                <p style="max-width: 800px; margin: 0 auto 30px; font-size: 1.1rem;">
+                    Stellar Zodiac is designed with privacy as a core principle. The app runs entirely on your device, collects zero personal information, and doesn't connect to any servers. Your zodiac favorites and preferences stay with you.
+                </p>
+                <a href="privacy.html" class="download-btn" style="background: linear-gradient(to right, #2ecc71, #27ae60);">
+                    <i class="fas fa-lock"></i>
+                    Read Our Full Privacy Policy
+                </a>
+            </div>
+        </section>
+
+        <!-- 下载区域 -->
+        <section class="download-section" id="download">
+            <div class="container">
+                <h2 class="section-title">Get Stellar Zodiac Now</h2>
+                <p style="max-width: 700px; margin: 0 auto 30px; font-size: 1.1rem;">
+                    Available exclusively on the App Store. Free download with no in-app purchases or subscriptions.
+                </p>
+                <a href="#" class="download-btn">
+                    <i class="fab fa-apple"></i>
+                    Download for iOS
+                </a>
+                <p style="margin-top: 20px; color: #aaa; font-size: 0.9rem;">
+                    Requires iOS 14.0 or later. Compatible with iPhone, iPad, and iPod touch.
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="container">
+            <div class="footer-links">
+                <a href="index.html">Home</a>
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="help.html">Help & FAQ</a>
+                <a href="mailto:support@example.com">Contact</a>
+            </div>
+            <p class="copyright">© 2023 Stellar Zodiac. All rights reserved. Apple and the Apple logo are trademarks of Apple Inc.</p>
+        </div>
+    </footer>
+
+    <script>
+        // 简单的交互效果
+        document.addEventListener('DOMContentLoaded', function() {
+            // 为下载按钮添加点击效果
+            const downloadBtn = document.querySelector('.download-btn');
+            if (downloadBtn) {
+                downloadBtn.addEventListener('click', function(e) {
+                    if (this.getAttribute('href') === '#') {
+                        e.preventDefault();
+                        alert('This is a demo website. In a real scenario, this button would link to the App Store.');
+                    }
+                });
+            }
+            
+            // 添加星星背景效果
+            createStars();
+        });
+        
+        function createStars() {
+            const starsContainer = document.createElement('div');
+            starsContainer.style.position = 'fixed';
+            starsContainer.style.top = '0';
+            starsContainer.style.left = '0';
+            starsContainer.style.width = '100%';
+            starsContainer.style.height = '100%';
+            starsContainer.style.pointerEvents = 'none';
+            starsContainer.style.zIndex = '-1';
+            document.body.appendChild(starsContainer);
+            
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.style.position = 'absolute';
+                star.style.width = Math.random() * 3 + 'px';
+                star.style.height = star.style.width;
+                star.style.backgroundColor = 'white';
+                star.style.borderRadius = '50%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.opacity = Math.random() * 0.7 + 0.3;
+                starsContainer.appendChild(star);
+                
+                // 添加闪烁动画
+                const duration = Math.random() * 5 + 3;
+                star.style.animation = `twinkle ${duration}s infinite alternate`;
+            }
+            
+            // 添加CSS动画
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes twinkle {
+                    0% { opacity: 0.3; }
+                    100% { opacity: 0.8; }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+    </script>
+</body>
+</html>
+
